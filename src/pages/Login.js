@@ -9,7 +9,7 @@ const Login = () => {
     function onSuccess(res) {
         if (res.accessToken) {
             setCookie('access_token', res.accessToken)
-            navigate('/')
+            navigate('/events')
         }
     }
 

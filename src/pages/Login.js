@@ -1,16 +1,14 @@
 import GoogleLogin from 'react-google-login'
-import { useDispatch } from 'react-redux'
-import { setAuth } from '../app/index'
 import { useNavigate } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 
 const Login = () => {
-    const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [cookies, setCookie] = useCookies()
 
     function onSuccess(res) {
         if (res.accessToken) {
-            console.log(res)
-            dispatch(setAuth(res.accessToken))
+            setCookie('access_token', res.accessToken)
             navigate('/')
         }
     }

@@ -1,10 +1,14 @@
 import fetch from 'isomorphic-fetch'
-import { useSelector } from 'react-redux'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import format from 'date-fns/format'
+import { useCookies } from 'react-cookie'
+import Filters from '../components/Filters'
 
 const Home = () => {
-    const token = useSelector((state) => state.auth.accessToken)
+    const [cookies] = useCookies()
+    const [filter, setFilter] = useState(1)
+    const token = cookies.access_token
     const { data, loading, error } = useQuery('events', fetchData)
 
     async function fetchData() {
@@ -17,20 +21,18 @@ const Home = () => {
     }
 
     function getTimeValues(date) {
-        const formattedDate = format(new Date(date), 'dd.MM.yyyy.')
         const formattedTime = format(new Date(date), 'HH:mm')
-        return { formattedDate, formattedTime }
+        return formattedTime
     }
 
     const events = !loading && !error && data && data.items && data.items.length ? data.items : []
 
     const sortedEvents = events.sort((a, b) => {
-        console.log(a.start.dateTime)
         return new Date(a.start.dateTime) - new Date(b.start.dateTime)
     })
 
     const groupedEvents = sortedEvents.reduce((a, v) => {
-        const day = format(new Date(v.start.dateTime), 'dd.MM')
+        const day = format(new Date(v.start.dateTime), 'dd.MM.yy')
         let acc = { ...a }
         if (!acc[day]) {
             acc = {
@@ -60,12 +62,12 @@ const Home = () => {
                             <div className="text-xl">{v1.summary}</div>
                             <div className="flex items-baseline">
                                 <div className="text-lg">
-                                    Start time: {startTime.formattedDate} {startTime.formattedTime}
+                                    Start time: {startTime.formattedDate} {startTime}
                                 </div>
                             </div>
                             <div className="flex items-baseline">
                                 <div className="text-lg">
-                                    End time: {endTime.formattedDate} {endTime.formattedTime}
+                                    End time: {endTime.formattedDate} {endTime}
                                 </div>
                             </div>
                         </div>
@@ -96,9 +98,27 @@ const Home = () => {
         )
     })
 
+    const filtersData = [
+        {
+            display: 'Today',
+            value: ''
+        },
+        {
+            display: ' Next 7 days',
+            value: ''
+        },
+        {
+            display: 'Next 30 days',
+            value: ''
+        }
+    ]
+
     return (
         <div className="container py-10">
-            <div className="text-3xl text-center">Events</div>
+            <div className="mb-10 text-3xl text-center">Events</div>
+            <div className="mb-5">
+                <Filters data={filtersData} handler={setFilter} active={filter} />
+            </div>
             <div className="grid grid-cols-5 gap-6">{eventsByDay}</div>
         </div>
     )

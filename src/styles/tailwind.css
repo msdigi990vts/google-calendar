@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .container {
+        @apply px-20 mx-auto md:px-5 lg:px-16;
+        max-width: 1800px;
+    }
+}

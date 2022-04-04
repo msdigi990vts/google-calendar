@@ -65,7 +65,7 @@ const Home = () => {
             }
 
             return acc
-        }, {})
+        }, null)
     }
 
     const events =
@@ -86,7 +86,7 @@ const Home = () => {
                 <Filters data={filtersData} handler={setSelectedFilter} active={selectedFilter} />
             </div>
             <div>
-                <EventsList data={groupedEvents} isMonthView={isViewByWeek} />
+                <EventsList data={groupedEvents} loading={isLoading} isMonthView={isViewByWeek} />
             </div>
         </div>
     )

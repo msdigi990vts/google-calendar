@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import apiHandler from '../utils/apiHandler'
 import format from 'date-fns/format'
 import getWeek from 'date-fns/getWeek'
@@ -7,10 +7,20 @@ import Filters from '../components/Filters'
 import { useCookies } from 'react-cookie'
 import EventsList from '../components/EventsList'
 
+async function apiDelte(token, id) {
+    await fetch(`${process.env.REACT_APP_API_URL}/${id}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
+
 const Home = () => {
     const [cookies] = useCookies()
     const token = cookies.access_token
     const [selectedFilter, setSelectedFilter] = useState(1)
+    const startOfToday = new Date(new Date().setHours(0, 0, 0, 0)).toISOString()
     const endOfToday = new Date(new Date().setHours(23, 59, 59, 999)).toISOString()
     const weekFromToday = new Date(
         new Date(new Date().setDate(new Date().getDate() + 6)).setHours(23, 59, 59, 999)
@@ -34,17 +44,18 @@ const Home = () => {
         }
     ]
 
-    const selectedFilterValue = filtersData[selectedFilter].value
+    const queryParams = `?timeMin=${startOfToday}&timeMax=${filtersData[selectedFilter].value}`
 
-    const queryFilter = {
-        timeMax: selectedFilterValue
-    }
-
-    const { data, isLoading, isError } = useQuery(['events', queryFilter], () =>
-        apiHandler(token, queryFilter)
+    const { data, isLoading, isError, refetch } = useQuery(['events', queryParams], () =>
+        apiHandler(token, queryParams)
     )
 
-    const { mutate } = useMutation((id) => apiHandler(id))
+    const { mutate } = useMutation((id) => apiDelte(token, id))
+
+    async function deleteEvent(id) {
+        await mutate(id)
+        refetch()
+    }
 
     function sortEvents(data, isWeek) {
         return data.reduce((a, v) => {
@@ -86,7 +97,12 @@ const Home = () => {
                 <Filters data={filtersData} handler={setSelectedFilter} active={selectedFilter} />
             </div>
             <div>
-                <EventsList data={groupedEvents} loading={isLoading} isMonthView={isViewByWeek} />
+                <EventsList
+                    data={groupedEvents}
+                    deleteHandler={deleteEvent}
+                    loading={isLoading}
+                    isMonthView={isViewByWeek}
+                />
             </div>
         </div>
     )

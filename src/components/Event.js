@@ -18,7 +18,7 @@ const Event = ({ data = null, title = '', alt = false, deleteHandler = () => {} 
                     const startTime = getTimeValues(v1.start.dateTime).time
                     const endTime = getTimeValues(v1.end.dateTime).time
                     const date = getTimeValues(v1.end.dateTime).date
-
+                    console.log(v1.id)
                     return (
                         <div key={k1} className="mb-5 last:mb-0">
                             <div className="text-xl">Title: {v1.summary}</div>
@@ -34,7 +34,7 @@ const Event = ({ data = null, title = '', alt = false, deleteHandler = () => {} 
                                 </div>
                             </div>
                             <div
-                                onClick={deleteHandler}
+                                onClick={() => deleteHandler(v1.id)}
                                 className="text-sm text-blue-600 underline cursor-pointer select-none">
                                 Delete event
                             </div>

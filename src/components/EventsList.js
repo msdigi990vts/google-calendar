@@ -15,13 +15,7 @@ const EventsList = ({
 
     const items = Object.keys(data).map((v, k) => (
         <div key={k} className="mb-10">
-            {console.log('aaa', data[v])}
-            <Event
-                title={v}
-                data={data[v]}
-                alt={isMonthView}
-                deleteHandler={() => deleteHandler(data[v].id)}
-            />
+            <Event title={v} data={data[v]} alt={isMonthView} deleteHandler={deleteHandler} />
         </div>
     ))
     return <div className="grid grid-cols-5 gap-6">{items}</div>

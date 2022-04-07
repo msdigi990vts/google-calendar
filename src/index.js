@@ -1,4 +1,5 @@
 import './styles/tailwind.css'
+import 'react-datepicker/dist/react-datepicker.css'
 import './styles/index.css'
 import React from 'react'
 import ReactDOM from 'react-dom'

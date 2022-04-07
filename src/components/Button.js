@@ -1,13 +1,11 @@
-
-const Button = ({
-    value = '',
-    handler = () => {}
-}) => {
+const Button = ({ value = '', handler = () => {}, light = false }) => {
     return (
-        <div onClick={handler} className="w-full px-4 py-6 text-center bg-blue-600 rounded cursor-pointer select-none">
-            <div className="text-lg text-white ">
-                {value}
-            </div>
+        <div
+            onClick={handler}
+            className={`w-full px-4 py-2 text-center rounded cursor-pointer select-none ${
+                light ? 'bg-gray-500' : 'bg-blue-600 '
+            }`}>
+            <div className="text-lg text-white ">{value}</div>
         </div>
     )
 }

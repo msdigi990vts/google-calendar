@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch'
 
 async function apiHandler(token, url, options) {
+    console.log({ options })
     const data = await fetch(`${process.env.REACT_APP_API_URL}${url}`, {
         ...options,
         headers: {

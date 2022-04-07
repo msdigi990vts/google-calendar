@@ -1,6 +1,12 @@
 import format from 'date-fns/format'
 
-const Event = ({ data = null, title = '', alt = false, deleteHandler = () => {} }) => {
+const Event = ({
+    data = null,
+    title = '',
+    alt = false,
+    deleteHandler = () => {},
+    deleteLoadingId = ''
+}) => {
     function getTimeValues(date) {
         const formattedTime = format(new Date(date), 'HH:mm')
         const formattedDate = format(new Date(date), 'dd.MM.yy.')
@@ -18,7 +24,6 @@ const Event = ({ data = null, title = '', alt = false, deleteHandler = () => {} 
                     const startTime = getTimeValues(v1.start.dateTime).time
                     const endTime = getTimeValues(v1.end.dateTime).time
                     const date = getTimeValues(v1.end.dateTime).date
-                    console.log(v1.id)
                     return (
                         <div key={k1} className="mb-5 last:mb-0">
                             <div className="text-xl">Title: {v1.summary}</div>
@@ -33,11 +38,15 @@ const Event = ({ data = null, title = '', alt = false, deleteHandler = () => {} 
                                     End time: {endTime.formattedDate} {endTime}
                                 </div>
                             </div>
-                            <div
-                                onClick={() => deleteHandler(v1.id)}
-                                className="text-sm text-blue-600 underline cursor-pointer select-none">
-                                Delete event
-                            </div>
+                            {deleteLoadingId === v1.id ? (
+                                <div>Loading...</div>
+                            ) : (
+                                <div
+                                    onClick={() => deleteHandler(v1.id)}
+                                    className="text-sm text-blue-600 underline cursor-pointer select-none">
+                                    Delete event
+                                </div>
+                            )}
                         </div>
                     )
                 })}

@@ -8,6 +8,9 @@ async function apiHandler(token, url, options) {
         }
     })
 
+    if (data.status === 204) {
+        return null
+    }
     return data.json()
 }
 

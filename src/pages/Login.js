@@ -8,7 +8,6 @@ const Login = () => {
 
     function onSuccess(res) {
         if (res.accessToken) {
-            console.log(res.accessToken)
             setCookie('access_token', res.accessToken)
             navigate('/events')
         }

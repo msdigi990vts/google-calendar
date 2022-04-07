@@ -4,7 +4,8 @@ const EventsList = ({
     data = null,
     isMonthView = false,
     deleteHandler = () => {},
-    loading = false
+    loading = false,
+    deleteLoadingId = ''
 }) => {
     if (loading) {
         return <div className="text-2xl">Loading...</div>
@@ -15,7 +16,13 @@ const EventsList = ({
 
     const items = Object.keys(data).map((v, k) => (
         <div key={k} className="mb-10">
-            <Event title={v} data={data[v]} alt={isMonthView} deleteHandler={deleteHandler} />
+            <Event
+                title={v}
+                data={data[v]}
+                alt={isMonthView}
+                deleteHandler={deleteHandler}
+                deleteLoadingId={deleteLoadingId}
+            />
         </div>
     ))
     return <div className="grid grid-cols-5 gap-6">{items}</div>

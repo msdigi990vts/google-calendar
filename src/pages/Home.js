@@ -9,37 +9,16 @@ import EventsList from '../components/EventsList'
 import Button from '../components/Button'
 import Modal from '../components/Modal'
 import AddEvent from '../components/AddEvent'
+import filtersData from '../data/filterData'
 
 const Home = () => {
     const [cookies] = useCookies()
+    const queryClient = useQueryClient()
     const token = cookies.access_token
     const [selectedFilter, setSelectedFilter] = useState(1)
     const [deleteLoadingId, setDeleteLoadingId] = useState('')
     const [modalOpen, setModalOpen] = useState(false)
     const startOfToday = new Date(new Date().setHours(0, 0, 0, 0)).toISOString()
-    const endOfToday = new Date(new Date().setHours(23, 59, 59, 999)).toISOString()
-    const weekFromToday = new Date(
-        new Date(new Date().setDate(new Date().getDate() + 6)).setHours(23, 59, 59, 999)
-    ).toISOString()
-    const monthFromNow = new Date(
-        new Date(new Date().setDate(new Date().getDate() + 29)).setHours(23, 59, 59, 999)
-    ).toISOString()
-    const queryClient = useQueryClient()
-
-    const filtersData = [
-        {
-            display: 'Today',
-            value: endOfToday
-        },
-        {
-            display: ' Next 7 days',
-            value: weekFromToday
-        },
-        {
-            display: 'Next 30 days',
-            value: monthFromNow
-        }
-    ]
 
     const queryParams = `?timeMin=${startOfToday}&timeMax=${filtersData[selectedFilter].value}`
 
@@ -81,17 +60,21 @@ const Home = () => {
     }
 
     async function addEvent(payload) {
-        const { start, end, summary } = payload
-        const data = `{
-            end: {
-                dateTime: '${end.toISOString()}'
-            },
-            start: {
-                dateTime: '${start.toISOString()}'
-            },
-            summary: '${summary}'
-        }`
-        await addMutate(data)
+        try {
+            const { start, end, summary } = payload
+            const data = `{
+                end: {
+                    dateTime: '${end.toISOString()}'
+                },
+                start: {
+                    dateTime: '${start.toISOString()}'
+                },
+                summary: '${summary}'
+            }`
+            await addMutate(data)
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     function sortEvents(data, isWeek) {

@@ -22,7 +22,7 @@ const Home = () => {
         new Date(new Date().setDate(new Date().getDate() + 6)).setHours(23, 59, 59, 999)
     ).toISOString()
     const monthFromNow = new Date(
-        new Date(new Date().setDate(new Date().getDate() + 30)).setHours(23, 59, 59, 999)
+        new Date(new Date().setDate(new Date().getDate() + 29)).setHours(23, 59, 59, 999)
     ).toISOString()
     const queryClient = useQueryClient()
 

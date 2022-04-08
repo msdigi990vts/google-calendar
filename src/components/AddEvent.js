@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import { useForm, Controller } from 'react-hook-form'
@@ -10,21 +9,8 @@ const AddEvent = ({ closeHandler = () => {}, submitHandler = () => {}, loading =
         handleSubmit,
         control,
         formState: { errors },
-        getValues,
-        setError
+        getValues
     } = useForm()
-    /* 
-    useEffect(() => {
-        const start = getValues('start')
-        const end = getValues('end')
-        if (new Date(end) <= new Date(start)) {
-            console.log('caleed')
-            setError('end', {
-                type: 'custom',
-                message: 'End time must be greater that start time'
-            })
-        }
-    }) */
 
     return (
         <div>
